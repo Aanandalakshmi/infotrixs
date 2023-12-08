@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #679cc0;
+        }
+
+        .card {
+            width: 300px;
+            height: 350px;
+            background-color: #fff;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .temp {
+            margin-bottom: 20px;
+            font-size: 50px;
+
+        }
+
+        .location {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .description {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .input-container {
+            margin-bottom: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .input-field {
+            padding: 10px;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .search-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+
+        <div class="input-container">
+            <input type="text" class="input-field" id="search-input" placeholder="Search location">
+            <button class="search-btn" id="search-btn">Search</button>
+        </div>
+        <div class="temp" id="temp"></div>
+        <div class="location" id="location"></div>
+        <div class="description" id="description"></div>
+    </div>
+
+    <script>
+        document.getElementById('search-btn').addEventListener('click', function () {
+            let location = document.getElementById('search-input').value;
+            getWeather(location);
+        });
+
+        function getWeather(location) {
+            fetch(`https://api.openweathermap.org/data/2.5/weather?q=${location}&appid=cc8ec7aba12cea51b946a20d209a7b73`)
+                .then(response => response.json())
+                .then(data => {
+                    let temp = Math.round(data.main.temp - 273.15);
+                    let description = data.weather[0].description;
+                    let city = data.name;
+                    let country = data.sys.country;
+
+                    document.getElementById('temp').textContent = temp + '°C';
+                    document.getElementById('location').textContent = city + ', ' + country;
+                    document.getElementById('description').textContent = description;
+                })
+                .catch(err => console.log(err));
+        }
+    </script>
+</body>
+
+</html>
